@@ -9,29 +9,27 @@ import os
 import os.path as opath
 import shutil
 
-def main():
-
-    #args = parseArguments()
-
-    name = 'test.pdf'
+def process(tlist,tvars,output):
 
     wdir = opath.join( programDir(), 'texfiles' )
 
     f = FileWriter( wdir )
 
-#    f.wirte( 'variant.tex', choiseVariant(args.variant) )
+    f.write( 'list.tex', generateList(tlist) )
+    f.write( 'vars.tex', generateVars(tvars) )
     f.write( 'date.tex', generateDate() )
 
-    buildAndCopyPDF( wdir, currentDir(), name )
+    buildAndCopyPDF( wdir, currentDir(), output )
 
-#def parseArguments():
-#    ap = argparse.ArgumentParser()
-#    ap.add_argument(  )
-# ap.add_argument( "filename", help="input file name" )
-# ap.add_argument( "-s", "--skipfirst", dest="skipfirst", metavar="N", default=10, help="skip first N lines" )
-# ap.add_argument( "-d", "--delimiter", dest="delimiter", metavar="CHAR", default=',', help="csv delimiter" )
-# ap.add_argument( "-q", "--quotechar", dest="quotechar", metavar="CHAR", default='"', help="csv quotechar" )
-# return ap.parse_args()
+def generateList(tlist):
+    return "\\input{listvars/%s}"%tlist
+
+def generateVars(tvars):
+    docvars = [ 'advtheme', 'keywords', 'website', 'ordernums' ]
+    ret = ""
+    for v in docvars:
+        ret += "\\def\\%s{%s}"%(v,tvars[v])
+    return ret
 
 def programDir(): return opath.dirname(opath.realpath(__file__))
 
@@ -55,4 +53,6 @@ class FileWriter:
         with open( opath.join( self.directory, filename ), "w") as f:
             f.write( string )
 
-if __name__ == '__main__': main()
+#if __name__ == '__main__': main()
+process('slot_machine', {'advtheme':'ЪЙ', 'keywords':'one two', 'website':'www.leningrad.ru', 'ordernums':'666 666'}, 'test.pdf')
+
