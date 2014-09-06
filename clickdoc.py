@@ -43,7 +43,7 @@ def getVariables():
 
     tvars = {}
     for tv in tvars_list:
-        try: tvars[tv] = input( "input %s: " % tv )
+        try: tvars[tv] = input( "%s: " % tv )
         except EOFError: exit()
         except KeyboardInterrupt: exit()
 
